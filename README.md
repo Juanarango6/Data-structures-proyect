@@ -28,10 +28,10 @@ Define dos constantes, RED y BLACK, que representan los dos colores posibles en 
 
 Estructura TreeNode
 
-struct TreeNode {
-    int val;          // Valor almacenado en el nodo.
-    TreeNode* left;   // Puntero al hijo izquierdo.
-    TreeNode* right;  // Puntero al hijo derecho.
+    struct TreeNode {
+       int val;          // Valor almacenado en el nodo.
+       TreeNode* left;   // Puntero al hijo izquierdo.
+       TreeNode* right;  // Puntero al hijo derecho.
     
     // Constructor que inicializa el valor del nodo y sus hijos a NULL.
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
@@ -39,65 +39,67 @@ struct TreeNode {
 
 Representa un nodo en un árbol binario genérico. Contiene un valor `(val)`, y punteros a sus hijos izquierdo `(left)` y derecho `(right)`. El constructor inicializa el valor del nodo y establece ambos hijos a `NULL`.
 
-Estructura RBNode
-struct RBNode {
-    int val;          // Valor almacenado en el nodo.
-    Color color;      // Color del nodo (ROJO o NEGRO).
-    RBNode* left;     // Puntero al hijo izquierdo.
-    RBNode* right;    // Puntero al hijo derecho.
-    RBNode* parent;   // Puntero al nodo padre.
+    Estructura RBNode
+      struct RBNode {
+      int val;          // Valor almacenado en el nodo.
+      Color color;      // Color del nodo (ROJO o NEGRO).
+      RBNode* left;     // Puntero al hijo izquierdo.
+      RBNode* right;    // Puntero al hijo derecho.
+      RBNode* parent;   // Puntero al nodo padre.
     
     // Constructor que inicializa el valor del nodo, su color a ROJO, y sus hijos y padre a NULL.
     RBNode(int x) : val(x), color(RED), left(NULL), right(NULL), parent(NULL) {}
-};
+    };
 Representa un nodo en un árbol rojo-negro. Incluye un campo color para indicar el color del nodo (rojo o negro) y un campo parent para referenciar al nodo padre. Permite implementar las reglas específicas del árbol rojo-negro.
 
-Función height
-int height(TreeNode* node) {
-    if (node == NULL) return 0;
-    return 1 + max(height(node->left), height(node->right));
-}
+    Función height
+     int height(TreeNode* node) {
+     if (node == NULL) return 0;
+     return 1 + max(height(node->left), height(node->right));
+    }
 Calcula la altura de un nodo en un árbol AVL. La altura es la longitud del camino más largo desde ese nodo hasta una hoja. Fundamental para determinar el equilibrio del árbol.
 
 Función isAVL
-bool isAVL(TreeNode* root) {
-    if (root == NULL) return true;
-    int leftHeight = height(root->left);
-    int rightHeight = height(root->right);
-    if (abs(leftHeight - rightHeight) > 1) return false;
-    return isAVL(root->left) && isAVL(root->right);
-}
+
+    bool isAVL(TreeNode* root) {
+       if (root == NULL) return true;
+       int leftHeight = height(root->left);
+       int rightHeight = height(root->right);
+       if (abs(leftHeight - rightHeight) > 1) return false;
+       return isAVL(root->left) && isAVL(root->right);  
+    }
 Verifica si un árbol dado es un árbol AVL. Un árbol AVL es un árbol binario de búsqueda auto-balanceado, donde la diferencia de alturas entre los hijos de cualquier nodo no excede uno. Crucial para garantizar que el árbol permanezca balanceado después de inserciones y eliminaciones.
 
-Función rotateRight
-TreeNode* rotateRight(TreeNode* y) {
-    TreeNode* x = y->left;
-    TreeNode* T2 = x->right;
-    x->right = y;
-    y->left = T2;
-    return x;
-}
+    Función rotateRight
+      TreeNode* rotateRight(TreeNode* y) {
+      TreeNode* x = y->left;
+      TreeNode* T2 = x->right;
+      x->right = y;
+      y->left = T2;
+      return x;
+    }
 Realiza una rotación simple a la derecha en un árbol AVL. La rotación gira el nodo y hacia la derecha, moviendo su subárbol izquierdo (x) a su posición original, y luego ajusta los punteros correspondientes. Retorna el nuevo nodo raíz del subárbol girado.
 
-Función rotateLeft
-TreeNode* rotateLeft(TreeNode* x) {
-    TreeNode* y = x->right;
-    TreeNode* T2 = y->left;
-    y->left = x;
-    x->right = T2;
-    return y;
-}
+    Función rotateLeft
+      TreeNode* rotateLeft(TreeNode* x) {
+      TreeNode* y = x->right;
+      TreeNode* T2 = y->left;
+      y->left = x;
+      x->right = T2;
+      return y;
+    }
 Realiza una rotación simple a la izquierda en un árbol AVL. La rotación gira el nodo x hacia la izquierda, moviendo su subárbol derecho (y) a su posición original, y luego ajusta los punteros correspondientes. Retorna el nuevo nodo raíz del subárbol girado.
 
-Función getBalance
-int getBalance(TreeNode* node) {
-    if (node == NULL) return 0;
-    return height(node->left) - height(node->right);
-}
+    Función getBalance
+     int getBalance(TreeNode* node) {
+     if (node == NULL) return 0;
+     return height(node->left) - height(node->right);
+    }
 Obtiene el equilibrio de un nodo en un árbol AVL. La función calcula la diferencia de alturas entre el subárbol izquierdo y derecho del nodo. Un valor positivo indica que el subárbol izquierdo es más alto, mientras que un valor negativo indica que el subárbol derecho es más alto. Retorna el resultado de esta comparación.
 
 Función insertAVL
-TreeNode* insertAVL(TreeNode* node, int key) {
+    
+    TreeNode* insertAVL(TreeNode* node, int key) {
     if (node == NULL)
         return new TreeNode(key);
 
@@ -127,11 +129,12 @@ TreeNode* insertAVL(TreeNode* node, int key) {
     }
 
     return node;
-}
+    }
 Inserta un nuevo nodo con clave key en el árbol AVL representado por node. Si el árbol resultante no es un árbol AVL válido después de la inserción, realiza las rotaciones necesarias para restaurarlo. Asegura que el árbol permanezca balanceado después de cada inserción.
 
 Función insertBST
-TreeNode* insertBST(TreeNode* root, int key) {
+
+    TreeNode* insertBST(TreeNode* root, int key) {
     if (root == NULL)
         return new TreeNode(key);
 
@@ -141,11 +144,12 @@ TreeNode* insertBST(TreeNode* root, int key) {
         root->right = insertBST(root->right, key);
 
     return root;
-}
+    }
 Inserta un nuevo nodo con clave key en el árbol binario de búsqueda (BST) representado por root. Si el árbol resultante no es un BST válido después de la inserción, realiza las inserciones necesarias para restaurarlo. Asegura que el árbol permanezca ordenado después de cada inserción.
 
 Función convertToAVL
-TreeNode* convertToAVL(TreeNode* root) {
+
+    TreeNode* convertToAVL(TreeNode* root) {
     if (root == NULL) return NULL;
     vector<int> nodes;
     queue<TreeNode*> q;
@@ -162,14 +166,15 @@ TreeNode* convertToAVL(TreeNode* root) {
         avlRoot = insertAVL(avlRoot, val);
     }
     return avlRoot;
-}
-Convierte un árbol binario de búsqueda (BST) en un árbol AVL. Primero, recorre el BST en orden y guarda todos los valores en un vector. Luego, utiliza estos valores para construir un nuevo árbol AVL, asegurando que el árbol resultante sea un AVL válido.
+    }
+Convierte un árbol binario de búsqueda `(BST)` en un árbol AVL. Primero, recorre el `BST` en orden y guarda todos los valores en un vector. Luego, utiliza estos valores para construir un nuevo árbol AVL, asegurando que el árbol resultante sea un AVL válido.
 
 Funciones Auxiliares para Rojo-Negro
-Función leftRotate
-void leftRotate(RBNode*& root, RBNode*& pt) {
-    RBNode* pt_right = pt->right;
-    pt->right = pt_right->left;
+     
+    Función leftRotate
+     void leftRotate(RBNode*& root, RBNode*& pt) {
+     RBNode* pt_right = pt->right;
+     pt->right = pt_right->left;
 
     if (pt->right!= NULL)
         pt->right->parent = pt;
@@ -185,11 +190,12 @@ void leftRotate(RBNode*& root, RBNode*& pt) {
 
     pt_right->left = pt;
     pt->parent = pt_right;
-}
+    }
 Realiza una rotación simple a la izquierda en un árbol rojo-negro. La rotación gira el nodo pt hacia la izquierda, moviendo su subárbol derecho (pt_right) a su posición original, y luego ajusta los punteros correspondientes.
 
 Función rightRotate
-void rightRotate(RBNode*& root, RBNode*& pt) {
+   
+    void rightRotate(RBNode*& root, RBNode*& pt) {
     RBNode* pt_left = pt->left;
     pt->left = pt_left->right;
 
@@ -207,11 +213,12 @@ void rightRotate(RBNode*& root, RBNode*& pt) {
 
     pt_left->right = pt;
     pt->parent = pt_left;
-}
+    }
 Realiza una rotación simple a la derecha en un árbol rojo-negro. La rotación gira el nodo pt hacia la derecha, moviendo su subárbol izquierdo `(pt_left)` a su posición original, y luego ajusta los punteros correspondientes.
 
 Función balanceInsert
-void balanceInsert(RBNode*& root, RBNode*& pt) {
+    
+    void balanceInsert(RBNode*& root, RBNode*& pt) {
     RBNode* parent_pt = NULL;
     RBNode* grand_parent_pt = NULL;
 
@@ -258,12 +265,12 @@ void balanceInsert(RBNode*& root, RBNode*& pt) {
         }
     }
     root->color = BLACK;
-}
+    }
 Esta función se encarga de mantener el árbol rojo-negro balanceado después de insertar un nuevo nodo `(pt)`. Realiza varias comprobaciones y rotaciones para asegurar que todas las propiedades del árbol rojo-negro se mantengan. Las rotaciones y cambios de color son necesarios para evitar violaciones de las propiedades del árbol rojo-negro después de la inserción.
 
-Función insertRB
-RBNode* insertRB(RBNode* root, int val) {
-    RBNode* pt = new RBNode(val);
+    Función insertRB
+     RBNode* insertRB(RBNode* root, int val) {
+     RBNode* pt = new RBNode(val);
 
     if (root == NULL) {
         pt->color = BLACK;
@@ -292,11 +299,12 @@ RBNode* insertRB(RBNode* root, int val) {
     balanceInsert(root, pt);
 
     return root;
-}
+    }
 Esta función inserta un nuevo nodo con valor val en el árbol rojo-negro representado por root. Comienza buscando la posición correcta para el nuevo nodo siguiendo las mismas reglas que un árbol binario de búsqueda `(BST)`. Una vez que encuentra la posición, inserta el nuevo nodo y llama a balanceInsert para asegurar que el árbol permanezca balanceado según las propiedades del árbol rojo-negro.
 
 Función convertToRB
-RBNode* convertToRB(TreeNode* root) {
+    
+    RBNode* convertToRB(TreeNode* root) {
     if (root == NULL) return NULL;
     vector<int> nodes;
     queue<TreeNode*> q;
@@ -313,11 +321,12 @@ RBNode* convertToRB(TreeNode* root) {
         rbRoot = insertRB(rbRoot, val);
     }
     return rbRoot;
-}
+    }
 Convierte un árbol binario de búsqueda `(BST)` en un árbol rojo-negro `(RBTree)`. Primero, recorre el `BST` en orden y guarda todos los valores en un vector. Luego, utiliza estos valores para construir un nuevo árbol `RBTree`, asegurando que el árbol resultante sea un RBTree válido.
 
 Función printRBTree
-void printRBTree(RBNode* root) {
+
+    void printRBTree(RBNode* root) {
     if (root == NULL) return;
     queue<RBNode*> q;
     q.push(root);
@@ -329,11 +338,12 @@ void printRBTree(RBNode* root) {
         if (node->right!= NULL) q.push(node->right);
     }
     cout << endl;
-}
+    }
 Imprime el árbol rojo-negro `(RBTree)` en consola, mostrando los nodos y su color (rojo o negro).
 
 Función printTree
-void printTree(TreeNode* root) {
+
+    void printTree(TreeNode* root) {
     if (root == NULL) return;
     queue<TreeNode*> q;
     q.push(root);
@@ -345,7 +355,7 @@ void printTree(TreeNode* root) {
         if (node->right!= NULL) q.push(node->right);
     }
     cout << endl;
-}
+    }
 Imprime el árbol binario de búsqueda `(BST)` en consola, mostrando los nodos en orden.
 
 Funciones generateDot
@@ -353,8 +363,6 @@ Existen dos sobrecargas de la función generateDot, una para árboles binarios d
 
 Funciones printBSTTreeDot, printAVLTreeDot, printRBTreeDot
 Estas funciones generan archivos DOT para visualizar árboles binarios de búsqueda `(BST)`, árboles AVL y árboles rojo-negros `(RBTree)` respectivamente. Cada función toma un nodo raíz y un nombre de archivo como argumentos, y utiliza la función generateDot para escribir la representación DOT del árbol en el archivo especificado.
-
-
 
 // PARTE DE LOS MENUS
 
