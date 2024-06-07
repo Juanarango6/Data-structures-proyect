@@ -24,7 +24,7 @@ Enumeración Color
 
 // Enumeración para representar los colores en un árbol rojo-negro.
 `enum Color { RED, BLACK };`
-Define dos constantes, RED y BLACK, que representan los dos colores posibles en un árbol rojo-negro. Utilizados para mantener el árbol balanceado durante inserciones y eliminaciones.
+Define dos constantes, `RED` y `BLACK`, que representan los dos colores posibles en un árbol rojo-negro. Utilizados para mantener el árbol balanceado durante inserciones y eliminaciones.
 
 Estructura TreeNode
 
