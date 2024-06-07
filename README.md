@@ -35,7 +35,7 @@ Estructura TreeNode
     
     // Constructor que inicializa el valor del nodo y sus hijos a NULL.
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
+    }
 
 Representa un nodo en un árbol binario genérico. Contiene un valor `(val)`, y punteros a sus hijos izquierdo `(left)` y derecho `(right)`. El constructor inicializa el valor del nodo y establece ambos hijos a `NULL`.
 
