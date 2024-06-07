@@ -704,6 +704,223 @@ Este código realiza lo siguiente:
 
 Este proceso permite visualizar gráficamente el grafo con las distancias mínimas calculadas por el algoritmo de Dijkstra, facilitando la comprensión de la estructura del grafo y las relaciones entre sus vértices.
 
+// FUNCIÓN FIND
+```c++
+int find(vector<int>& parent, int i) {
+    if (parent[i] == -1)
+        return i;
+    return find(parent, parent[i]);
+}
+```
+Busca la raíz del conjunto al que pertenece un nodo específico en un grafo o árbol. Utiliza el algoritmo de búsqueda recursiva para encontrar el ancestro común más cercano (ACM) de un nodo dado, lo cual representa la raíz del conjunto al que pertenece ese nodo.
+
+**Parámetros**:
+  `vector<int>& parent`: Referencia al vector que contiene los índices de los nodos padres. El valor -1 indica que el nodo es la raíz de su propio conjunto.
+  `int i`: Índice del nodo cuya raíz se desea encontrar.
+  Retorno: Entero que representa la raíz del conjunto al que pertenece el nodo i.
+
+// FUNCIÓN unionSets
+```c++
+void unionSets(vector<int>& parent, int x, int y) {
+    int xSet = find(parent, x);
+    int ySet = find(parent, y);
+    parent[xSet] = ySet;
+}
+```
+Une dos conjuntos en un solo conjunto mediante la operación de unión. Se utiliza para combinar componentes conectados en un grafo o árbol.
+
+**Parámetros**:
+  `vector<int>& parent`: Referencia al vector que contiene los índices de los nodos padres. El valor -1 indica que el nodo es la raíz de su propio conjunto.
+  `int x`: Índice del primer nodo cuyo conjunto se desea unir.
+  `int y`: Índice del segundo nodo cuyo conjunto se desea unir.
+  Efecto secundario: Modifica el vector `parent` para reflejar la nueva estructura de conjuntos después de la unión.
+
+// FUNCIÓN compareEdges
+```c++
+bool compareEdges(const Edge& a, const Edge& b) {
+    return a.weight < b.weight;
+}
+```
+Compara dos aristas basándose en su peso. Se utiliza para ordenar las aristas de un grafo según su peso antes de aplicar el algoritmo de Kruskal.
+
+**Parámetros**:
+  `const Edge& a`: Referencia al vector que contiene los índices de los nodos padres. El valor -1 indica que el nodo es la raíz de su propio conjunto.
+  `const Edge& b`: Índice del primer nodo cuyo conjunto se desea unir.
+  Retorno: Valor booleano que indica si el peso de la arista a es menor que el peso de la arista b. Se utiliza para ordenar las aristas en orden ascendente de peso.
+
+//ALGORITMO KRUSKAL
+  ```c++
+void kruskal(const Graph& graph) {
+    int V = graph.adjacencyMatrix.size();
+    vector<Edge> result(V - 1); // Árbol de expansión mínima tendrá (V - 1) aristas
+    vector<int> parent(V, -1);  // Vector de padres para representar los conjuntos
+
+    vector<Edge> edges; // Lista de aristas ordenadas por peso
+    for (int i = 0; i < V; ++i) {
+        for (int j = i + 1; j < V; ++j) {
+            if (graph.adjacencyMatrix[i][j]!= 0) {
+                edges.push_back({i, j, graph.adjacencyMatrix[i][j]});
+            }
+        }
+    }
+    // Ordenar las aristas por peso
+    sort(edges.begin(), edges.end(), compareEdges);
+
+    int edgeCount = 0;
+    int i = 0;
+    while (edgeCount < V - 1 && i < edges.size()) {
+        Edge nextEdge = edges[i++];
+        int x = find(parent, nextEdge.src);
+        int y = find(parent, nextEdge.dest);
+        if (x!= y) {
+            result[edgeCount++] = nextEdge;
+            unionSets(parent, x, y);
+        }
+    }
+}
+```
+Implementación del algoritmo de Kruskal para encontrar un árbol de expansión mínima (AEM) en un grafo no dirigido ponderado. El algoritmo selecciona aristas disjuntas en orden creciente de peso hasta que se alcanza el número máximo de aristas que puede tener un árbol conexo, es decir, (V - 1) aristas donde V es el número de vértices.
+
+**Parámetros**:
+  `const Graph& graph`: Grafo no dirigido ponderado del cual se desea encontrar el AEM.
+  Efecto secundario: Construye un vector `result` que contiene las aristas del AEM y modifica el vector `parent` para reflejar la estructura de conjuntos final después de 
+  realizar todas las uniones necesarias.
+
+###// Imprimir el Árbol de Expansión Mínima
+```c++
+cout << "Arbol de expansion minima (Kruskal):" << endl;
+for (int i = 0; i < V - 1; ++i) {
+    cout << result[i].src << " -- " << result[i].dest << " [peso=" << result[i].weight << "]" << endl;
+}
+```
+Este fragmento de código imprime el árbol de expansión mínima (AEM) encontrado por el algoritmo de Kruskal. Para cada arista en el AEM, muestra el origen (src), el destino (dest) y el peso de la arista (weight). Esto permite visualizar la estructura del AEM directamente en la consola.
+
+###// Generar Archivo DOT para Visualizar el Resultado de Kruskal
+```c++
+ofstream dotFile("kruskal.dot");
+if (dotFile.is_open()) {
+    dotFile << "graph G {" << endl;
+    for (int i = 0; i < V - 1; ++i) {
+        dotFile << result[i].src << " -- " << result[i].dest << " [label=\"" << result[i].weight << "\"];" << endl;
+    }
+    dotFile << "}" << endl;
+    dotFile.close();
+    cout << "Archivo DOT generado para Kruskal: kruskal.dot" << endl;
+```
+Este bloque de código genera un archivo DOT `kruskal.dot` que describe el AEM encontrado por el algoritmo de Kruskal. El archivo DOT es un formato estándar utilizado para describir gráficos en programas de diagramación como Graphviz. Para cada arista en el AEM, agrega una línea en el archivo DOT que conecta el origen y el destino de la arista, etiquetada con el peso de la arista.
+
+###// Verificar si el Archivo DOT se ha Generado Correctamente
+```c++
+ifstream checkFile("kruskal.dot");
+if (checkFile.is_open()) {
+    checkFile.close();
+    // Generar la imagen PNG a partir del archivo DOT
+    if (system("dot -Tpng kruskal.dot -o kruskal.png") == 0) {
+        cout << "Imagen de Kruskal generada como 'kruskal.png'." << endl;
+    } else {
+        cerr << "Error: No se pudo generar la imagen de Kruskal." << endl;
+    }
+} else {
+    cerr << "Error: El archivo DOT de Kruskal no se generó correctamente." << endl;
+}
+```
+Después de generar el archivo DOT, este fragmento verifica si el archivo se ha creado correctamente abriendo el archivo `kruskal.dot` y luego intenta convertirlo a una imagen PNG utilizando Graphviz `dot`. Si la conversión es exitosa, imprime un mensaje indicando que la imagen fue generada. En caso contrario, muestra un mensaje de error.
+
+###// Cerrar el Archivo DOT y Manejo de Errores
+```c++
+} else {
+    cerr << "Error: No se pudo abrir el archivo DOT para escribir." << endl;
+}
+```
+Este último bloque maneja el caso en el que no se pudo abrir el archivo DOT para escritura. Imprime un mensaje de error indicando que hubo un problema al intentar crear el archivo DOT.
+
+// Algoritmo de Prim para encontrar un árbol de expansión mínima
+```c++
+void prim(const Graph& graph) {
+    int V = graph.adjacencyMatrix.size();
+    vector<int> key(V, numeric_limits<int>::max()); // Vector para almacenar la clave de cada vértice
+    vector<bool> inMST(V, false); // Vector para marcar los vértices ya incluidos en el MST
+    vector<int> parent(V, -1); // Vector para almacenar el padre de cada vértice en el MST
+    key[0] = 0; // Inicializar la clave del primer vértice a 0
+    parent[0] = -1; // Establecer el padre del primer vértice como -1, indicando que es la raíz
+
+    for (int count = 0; count < V - 1; ++count) { // Iterar hasta encontrar V - 1 aristas
+        int minKey = numeric_limits<int>::max(); // Inicializar la clave mínima a infinito
+        int u = -1; // Inicializar el vértice u como -1
+
+        for (int v = 0; v < V; ++v) { // Buscar el vértice con la clave mínima aún no considerada
+            if (!inMST[v] && key[v] < minKey) {
+                minKey = key[v];
+                u = v;
+            }
+        }
+
+        inMST[u] = true; // Marcar el vértice u como incluido en el MST
+
+        for (int v = 0; v < V; ++v) { // Actualizar las claves de los vértices adyacentes a u
+            if (graph.adjacencyMatrix[u][v] &&!inMST[v] && graph.adjacencyMatrix[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = graph.adjacencyMatrix[u][v];
+            }
+        }
+    }
+}
+```
+Implementación del algoritmo de Prim para encontrar un árbol de expansión mínima (AEM) en un grafo ponderado conexo. El algoritmo construye el AEM añadiendo gradualmente aristas que conectan vértices no incluidos en el MST actual, siempre elegiendo la arista con el peso mínimo que conecta un vértice fuera del MST con uno dentro.
+
+**Parámetros**:
+  `const Graph& graph`: Grafo ponderado conexo del cual se desea encontrar el AEM.
+  Efecto secundario: Construye un vector `parent` que contiene el padre de cada vértice en el MST, y un vector `key` que almacena la distancia mínima desde el vértice 
+  inicial hasta cada vértice. Además, mantiene un vector `inMST` que marca los vértices ya incluidos en el MST.
+
+// Imprimir el árbol de expansión mínima (Prim)
+```c++
+cout << "Arbol de expansion minima (Prim):" << endl;
+for (int i = 1; i < V; ++i) {
+    cout << parent[i] << " -- " << i << " [peso=" << graph.adjacencyMatrix[i][parent[i]] << "]" << endl;
+}
+```
+Este fragmento de código imprime el árbol de expansión mínima (AEM) encontrado por el algoritmo de Prim. Para cada arista en el AEM, muestra el origen `parent[i]`, el destino `i`, y el peso de la arista `graph.adjacencyMatrix[i][parent[i]]`. Esto permite visualizar la estructura del AEM directamente en la consola.
+
+// Generar archivo DOT para visualizar el resultado de Prim
+```c++
+ofstream dotFile("prim.dot");
+if (dotFile.is_open()) {
+    dotFile << "graph G {" << endl;
+    for (int i = 1; i < V; ++i) {
+        dotFile << parent[i] << " -- " << i << " [label=\"" << graph.adjacencyMatrix[i][parent[i]] << "\"];" << endl;
+    }
+    dotFile << "}" << endl;
+    dotFile.close();
+    cout << "Archivo DOT generado para Prim: prim.dot" << endl;
+```
+Este bloque de código genera un archivo DOT `prim.dot` que describe el AEM encontrado por el algoritmo de Prim. El archivo DOT es un formato estándar utilizado para describir gráficos en programas de diagramación como Graphviz. Para cada arista en el AEM, agrega una línea en el archivo DOT que conecta el origen y el destino de la arista, etiquetada con el peso de la arista.
+
+// Verificar si el archivo DOT se ha generado correctamente
+```c++
+ifstream checkFile("prim.dot");
+if (checkFile.is_open()) {
+    checkFile.close();
+    // Generar la imagen PNG a partir del archivo DOT
+    if (system("dot -Tpng prim.dot -o prim.png") == 0) {
+        cout << "Imagen de Prim generada como 'prim.png'." << endl;
+    } else {
+        cerr << "Error: No se pudo generar la imagen de Prim." << endl;
+    }
+} else {
+    cerr << "Error: El archivo DOT de Prim no se generó correctamente." << endl;
+}
+```
+Después de generar el archivo DOT, este fragmento verifica si el archivo se ha creado correctamente abriendo el archivo `prim.dot` y luego intenta convertirlo a una imagen PNG utilizando Graphviz `dot`. Si la conversión es exitosa, imprime un mensaje indicando que la imagen fue generada. En caso contrario, muestra un mensaje de error.
+
+// Cerrar el archivo DOT y manejo de errores
+```c++
+} else {
+    cerr << "Error: No se pudo abrir el archivo DOT para escribir." << endl;
+}
+```
+Este último bloque maneja el caso en el que no se pudo abrir el archivo DOT para escritura. Imprime un mensaje de error indicando que hubo un problema al intentar crear el archivo DOT.
+
 // PARTE DE LOS MENUS
 
 int main() {
