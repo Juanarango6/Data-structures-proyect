@@ -1,5 +1,5 @@
 # Data-structures-proyect
-Data structures proyect
+//Data structures proyect
 
 required application: Aplicación requerida por lo que es importante intalar antes de ejecutar
   -windows_10_cmake_Release_graphviz-install-11.0.0-win64.exe
