@@ -19,12 +19,15 @@ Data structures proyect.exe // Permite ejecutar el software sin tener instalado 
 ******************************************************************************************
 
 // PARTE DE ARBOLES 
+
 Enumeración Color
+
 // Enumeración para representar los colores en un árbol rojo-negro.
-enum Color { RED, BLACK };
+`enum Color { RED, BLACK };`
 Define dos constantes, RED y BLACK, que representan los dos colores posibles en un árbol rojo-negro. Utilizados para mantener el árbol balanceado durante inserciones y eliminaciones.
 
 Estructura TreeNode
+
 struct TreeNode {
     int val;          // Valor almacenado en el nodo.
     TreeNode* left;   // Puntero al hijo izquierdo.
@@ -33,7 +36,8 @@ struct TreeNode {
     // Constructor que inicializa el valor del nodo y sus hijos a NULL.
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
-Representa un nodo en un árbol binario genérico. Contiene un valor (val), y punteros a sus hijos izquierdo (left) y derecho (right). El constructor inicializa el valor del nodo y establece ambos hijos a NULL.
+
+Representa un nodo en un árbol binario genérico. Contiene un valor `(val)`, y punteros a sus hijos izquierdo `(left)` y derecho `(right)`. El constructor inicializa el valor del nodo y establece ambos hijos a `NULL`.
 
 Estructura RBNode
 struct RBNode {
@@ -204,7 +208,7 @@ void rightRotate(RBNode*& root, RBNode*& pt) {
     pt_left->right = pt;
     pt->parent = pt_left;
 }
-Realiza una rotación simple a la derecha en un árbol rojo-negro. La rotación gira el nodo pt hacia la derecha, moviendo su subárbol izquierdo (pt_left) a su posición original, y luego ajusta los punteros correspondientes.
+Realiza una rotación simple a la derecha en un árbol rojo-negro. La rotación gira el nodo pt hacia la derecha, moviendo su subárbol izquierdo `(pt_left)` a su posición original, y luego ajusta los punteros correspondientes.
 
 Función balanceInsert
 void balanceInsert(RBNode*& root, RBNode*& pt) {
@@ -255,7 +259,7 @@ void balanceInsert(RBNode*& root, RBNode*& pt) {
     }
     root->color = BLACK;
 }
-Esta función se encarga de mantener el árbol rojo-negro balanceado después de insertar un nuevo nodo (pt). Realiza varias comprobaciones y rotaciones para asegurar que todas las propiedades del árbol rojo-negro se mantengan. Las rotaciones y cambios de color son necesarios para evitar violaciones de las propiedades del árbol rojo-negro después de la inserción.
+Esta función se encarga de mantener el árbol rojo-negro balanceado después de insertar un nuevo nodo `(pt)`. Realiza varias comprobaciones y rotaciones para asegurar que todas las propiedades del árbol rojo-negro se mantengan. Las rotaciones y cambios de color son necesarios para evitar violaciones de las propiedades del árbol rojo-negro después de la inserción.
 
 Función insertRB
 RBNode* insertRB(RBNode* root, int val) {
@@ -289,7 +293,7 @@ RBNode* insertRB(RBNode* root, int val) {
 
     return root;
 }
-Esta función inserta un nuevo nodo con valor val en el árbol rojo-negro representado por root. Comienza buscando la posición correcta para el nuevo nodo siguiendo las mismas reglas que un árbol binario de búsqueda (BST). Una vez que encuentra la posición, inserta el nuevo nodo y llama a balanceInsert para asegurar que el árbol permanezca balanceado según las propiedades del árbol rojo-negro.
+Esta función inserta un nuevo nodo con valor val en el árbol rojo-negro representado por root. Comienza buscando la posición correcta para el nuevo nodo siguiendo las mismas reglas que un árbol binario de búsqueda `(BST)`. Una vez que encuentra la posición, inserta el nuevo nodo y llama a balanceInsert para asegurar que el árbol permanezca balanceado según las propiedades del árbol rojo-negro.
 
 Función convertToRB
 RBNode* convertToRB(TreeNode* root) {
@@ -310,7 +314,7 @@ RBNode* convertToRB(TreeNode* root) {
     }
     return rbRoot;
 }
-Convierte un árbol binario de búsqueda (BST) en un árbol rojo-negro (RBTree). Primero, recorre el BST en orden y guarda todos los valores en un vector. Luego, utiliza estos valores para construir un nuevo árbol RBTree, asegurando que el árbol resultante sea un RBTree válido.
+Convierte un árbol binario de búsqueda `(BST)` en un árbol rojo-negro `(RBTree)`. Primero, recorre el `BST` en orden y guarda todos los valores en un vector. Luego, utiliza estos valores para construir un nuevo árbol `RBTree`, asegurando que el árbol resultante sea un RBTree válido.
 
 Función printRBTree
 void printRBTree(RBNode* root) {
@@ -326,7 +330,7 @@ void printRBTree(RBNode* root) {
     }
     cout << endl;
 }
-Imprime el árbol rojo-negro (RBTree) en consola, mostrando los nodos y su color (rojo o negro).
+Imprime el árbol rojo-negro `(RBTree)` en consola, mostrando los nodos y su color (rojo o negro).
 
 Función printTree
 void printTree(TreeNode* root) {
@@ -342,13 +346,13 @@ void printTree(TreeNode* root) {
     }
     cout << endl;
 }
-Imprime el árbol binario de búsqueda (BST) en consola, mostrando los nodos en orden.
+Imprime el árbol binario de búsqueda `(BST)` en consola, mostrando los nodos en orden.
 
 Funciones generateDot
-Existen dos sobrecargas de la función generateDot, una para árboles binarios de búsqueda (BST) y otra para árboles rojo-negros (RBTree). Ambas escriben en un archivo DOT, describiendo la estructura del árbol para su posterior visualización con herramientas como Graphviz.
+Existen dos sobrecargas de la función generateDot, una para árboles binarios de búsqueda `(BST)` y otra para árboles rojo-negros `(RBTree)`. Ambas escriben en un archivo DOT, describiendo la estructura del árbol para su posterior visualización con herramientas como Graphviz.
 
 Funciones printBSTTreeDot, printAVLTreeDot, printRBTreeDot
-Estas funciones generan archivos DOT para visualizar árboles binarios de búsqueda (BST), árboles AVL y árboles rojo-negros (RBTree) respectivamente. Cada función toma un nodo raíz y un nombre de archivo como argumentos, y utiliza la función generateDot para escribir la representación DOT del árbol en el archivo especificado.
+Estas funciones generan archivos DOT para visualizar árboles binarios de búsqueda `(BST)`, árboles AVL y árboles rojo-negros `(RBTree)` respectivamente. Cada función toma un nodo raíz y un nombre de archivo como argumentos, y utiliza la función generateDot para escribir la representación DOT del árbol en el archivo especificado.
 
 
 
